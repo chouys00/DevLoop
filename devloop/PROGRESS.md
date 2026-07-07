@@ -76,3 +76,13 @@
 - 改動: packages/desktop-ui/{src/update-view.mjs,test/update-view.test.mjs,
   renderer.mjs,index.html}
 - 測試: node --test 77/77 pass（新增 11，先紅後綠；調度員親自複跑確認）
+
+## 2026-07-07 — T-008
+- 成果: 想看/已看三態標記。sidecar JSON 存 userData（絕不寫 md），
+  mark-state.mjs 純函式 + mark-store.mjs 原子寫入路徑可注入；徽章
+  （想看黃/已看藍）+ 篩選列標記下拉與內容篩選交集。
+- 改動: packages/desktop-ui/{src/mark-state.mjs,src/mark-store.mjs,
+  test/mark-{state,store}.test.mjs,main.mjs,preload.cjs,renderer.mjs,index.html}
+  + 既有 browse/writeback 測試清理各加固一行
+- 測試: node --test 101/101（首驗抓到 1/5 機率 flaky —— Windows 防毒鎖檔
+  致 rmSync ENOTEMPTY，重派修根因後調度員親自連跑 6/6 全綠）
