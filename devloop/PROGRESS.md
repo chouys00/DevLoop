@@ -39,3 +39,15 @@
   preload.cjs,renderer.mjs,index.html}
 - 測試: node --test 15/15 pass（全用 dummy node -e 指令，未觸發真實更新）；smoke exit 0
 - 越界: 清掉一個 subagent shell 誤建於 repo 根的 0-byte 殘留檔 `process.exit(0)`
+
+## 2026-07-07 — T-004
+- 成果: 篩選/搜尋 + 手動增修寫回。parse.mjs 將區段解析為結構化項目（各類
+  各自 regex，失敗欄位給 null 不崩潰）；filter.mjs 純函式支援門檻≥/關鍵字
+  （不分大小寫）/類型/月份交集過濾。寫回層 writeback.mjs 用 core `writeSectionsFile`
+  序列化 + 自寫順序保留解析器 + 合成鍵繞開 core 的重排/季別鍵碰撞，達 byte 級保真；
+  原子寫入（*.tmp → rename）。IPC 暴露 getItems/editItem/addItem/deleteItem。
+- 改動: packages/desktop-ui/{src/parse.mjs,src/filter.mjs,src/writeback.mjs,
+  src/browse.mjs,test/{parse,filter,writeback,browse}.test.mjs,
+  test/fixtures/{anime,movies,games}-real.md,main.mjs,preload.cjs,renderer.mjs,index.html}
+- 測試: node --test 45/45 pass（寫入測試僅對 os.tmpdir() fixture 複本，未寫真實 md）；smoke exit 0
+- 保真驗證: round-trip 後標題行 + 30-dash 分隔線骨架逐字相等，僅目標欄位變動
