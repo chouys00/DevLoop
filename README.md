@@ -31,3 +31,10 @@
 | `LESSONS.md` | AI | 踩雷教訓，新 session 必讀 |
 
 設計文件：`docs/superpowers/specs/2026-07-07-devloop-design.md`
+
+## 範例參考
+
+`examples/todo-cli-demo/` 是第一次端對端驗證的完整存底（示範用的
+todo-cli 程式碼 + 對應的 GOAL/TASKS/PROGRESS/LESSONS 快照），僅供
+參考 GOAL.md 怎麼寫、任務描述該多細，不是活動狀態，不影響現在的
+`devloop/` 與 `workspace/`。

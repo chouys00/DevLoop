@@ -7,7 +7,7 @@ Desktop.ini
 .vscode/
 .idea/
 
-# todo-cli 預設資料檔（執行時產生，不入版控）
-workspace/todo-cli/todos.json
+# 執行時在 workspace/ 底下產生的資料檔通用忽略規則可依新專案需求再補
+# （舊 todo-cli 示範的資料檔忽略規則已隨程式碼一併歸檔至 examples/）
 
 # 不忽略 .claude/ —— skill 是本專案的核心產出物
