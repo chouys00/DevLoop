@@ -51,3 +51,12 @@
   test/fixtures/{anime,movies,games}-real.md,main.mjs,preload.cjs,renderer.mjs,index.html}
 - 測試: node --test 45/45 pass（寫入測試僅對 os.tmpdir() fixture 複本，未寫真實 md）；smoke exit 0
 - 保真驗證: round-trip 後標題行 + 30-dash 分隔線骨架逐字相等，僅目標欄位變動
+
+## 2026-07-07 — T-005
+- 成果: 預覽層改走順序保留解析（parse.mjs splitDocument），棄用 core
+  loadSections 的 Map 路徑 —— 動畫同年多季不再碰撞遺失、遊戲前言不再
+  影響區段。穩定排序（年 desc → 月/季 desc → 檔案原順序），介面不變
+  main.mjs 免改。LESSONS 的預覽疑慮解除。
+- 改動: packages/desktop-ui/{src/reader.mjs,test/reader.test.mjs,
+  test/fixtures/anime-seasons.md}
+- 測試: node --test 50/50 pass（新增 5，TDD 先紅後綠；調度員親自複跑確認）

@@ -8,4 +8,4 @@
 - desktop-ui 要用 `@catchlist/core` 時：workspace symlink 是空目錄（package 名解析不到），改用相對路徑 `../../core/mdstore.js` 唯讀匯入 sibling 才穩。Electron 架構已備 preload contextBridge + `ipcMain.handle`，T-003/T-004 沿用同一 IPC 橋。
 - 更新指令接線：`update:anime`→spiderMAL、`update:movies`→imdb_tracker、`update:games`→steam_discovery（cwd 須為 repo 根）。Windows 下 npm.cmd 要 shell:true，但 spawn dummy `node -e` 測試要 shell:false（否則含空白路徑被 cmd 破壞）。
 - 越界檢查必跑 `git status --porcelain`：subagent 的 shell 指令可能在 repo 根誤建殘留檔（曾出現 0-byte `process.exit(0)`），未追蹤者驗收時一併刪除。
-- core `loadSections` 有損：會吃掉遊戲 md 的非標題前言，且動畫「季別」全映射到 `YYYY-00` 鍵→Map 碰撞只留一個→同年多季會遺失。寫回時不能天真 load→write，需自寫順序保留解析器 + 合成鍵（T-004 已如此）。**疑慮**：T-002 的預覽 reader 直接用 loadSections，動畫同年多季預覽可能只顯示一季、遊戲前言遺失——待發想任務驗證/修正。
+- core `loadSections` 有損：會吃掉遊戲 md 的非標題前言，且動畫「季別」全映射到 `YYYY-00` 鍵→Map 碰撞只留一個→同年多季會遺失。desktop-ui 讀寫一律走自寫的順序保留解析器（parse.mjs/writeback.mjs，T-004 建立、T-005 起預覽層也改用），別再碰 loadSections。

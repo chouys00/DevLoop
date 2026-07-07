@@ -39,7 +39,7 @@
 
 ## T-005
 
-- 狀態: proposed
+- 狀態: done
 - 來源: ai
 - 描述: 修正預覽層資料遺失：T-002 的 reader.mjs 用 core `loadSections`，
   動畫同年多季會因季別鍵碰撞只顯示一季、遊戲 md 前言被吃掉（LESSONS 已記）。
