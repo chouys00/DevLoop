@@ -60,3 +60,11 @@
 - 改動: packages/desktop-ui/{src/reader.mjs,test/reader.test.mjs,
   test/fixtures/anime-seasons.md}
 - 測試: node --test 50/50 pass（新增 5，TDD 先紅後綠；調度員親自複跑確認）
+
+## 2026-07-07 — T-006
+- 成果: 條目外部連結。links.mjs 純函式組 URL（動畫→MAL 搜尋、電影→IMDb
+  tt id 直達/搜尋、遊戲→Steam appid 直達/搜尋）；parse 補抽 imdbId/appid；
+  主行程組 URL 經 shell.openExternal（不信任 renderer 傳 URL），每列 🔗 按鈕。
+- 改動: packages/desktop-ui/{src/links.mjs,src/parse.mjs,src/browse.mjs,
+  main.mjs,preload.cjs,renderer.mjs,test/{links,parse,browse}.test.mjs}
+- 測試: node --test 66/66 pass（新增 16，先紅後綠；調度員親自複跑確認）
