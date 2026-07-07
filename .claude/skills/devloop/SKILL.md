@@ -16,6 +16,9 @@ description: Use when the user asks to run devloop, start the dev loop, continue
 讀 `devloop/GOAL.md`、`devloop/TASKS.md`、`devloop/LESSONS.md`，
 以及 `devloop/PROGRESS.md` 的**最後 3 節**（= 最後 3 個任務條目；讀檔尾約 60 行即可，不足 3 節就讀全部）。
 
+`GOAL.md` 不存在或沒有實質目標內容 → **STOP**：請使用者先跑
+`devloop-goal` skill 以訪談方式生成 GOAL.md，不要憑空代填。
+
 檢查 `devloop/DECISIONS.md` 是否有 `狀態: pending` 的決定
 → 有就 **STOP**（見停止條件）。
 
