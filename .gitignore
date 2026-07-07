@@ -1,0 +1,10 @@
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# 不忽略 .claude/ —— skill 是本專案的核心產出物
