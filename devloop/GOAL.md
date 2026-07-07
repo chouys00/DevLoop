@@ -1,6 +1,7 @@
 # GOAL
 
 mode: hybrid
+<!-- hybrid = AI 發想的任務需使用者核准；autonomous = 免核准直接執行 -->
 
 ## 目標
 
