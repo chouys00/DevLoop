@@ -27,8 +27,9 @@
 
 - 狀態: proposed
 - 來源: ai
-- 描述: 無子指令或未知子指令時，印出 usage 說明（四個子指令與 --file 選項）
-  並以非零 exit code 結束，取代目前的 throw 堆疊。含測試。
+- 描述: CLI 錯誤輸出人性化：add/done/remove 的錯誤（缺參數、找不到 id）
+  目前以 throw 堆疊呈現給 CLI 使用者，改為單行錯誤訊息 + 非零 exit code
+  （usage 說明已存在，維持不動）。含測試。
 
 ## T-005
 

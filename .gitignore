@@ -7,4 +7,7 @@ Desktop.ini
 .vscode/
 .idea/
 
+# todo-cli 預設資料檔（執行時產生，不入版控）
+workspace/todo-cli/todos.json
+
 # 不忽略 .claude/ —— skill 是本專案的核心產出物

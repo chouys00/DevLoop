@@ -29,6 +29,8 @@ description: Use when the user asks to run devloop, start the dev loop, continue
 - 沒有 todo 時：
   - `mode: autonomous` 且有 `proposed` → 把第一個 `proposed` 改為 `doing`，
     **照常進入 3（閘門檢查不可跳過）**。
+  - `mode: hybrid` 且已有 `proposed` → **STOP**（停止條件 3：請核准既有
+    proposed 任務），不再重複發想。
   - 否則 → 跳到「7. 發想」。
 
 ### 3. 重大機制閘門
