@@ -68,3 +68,11 @@
 - 改動: packages/desktop-ui/{src/links.mjs,src/parse.mjs,src/browse.mjs,
   main.mjs,preload.cjs,renderer.mjs,test/{links,parse,browse}.test.mjs}
 - 測試: node --test 66/66 pass（新增 16，先紅後綠；調度員親自複跑確認）
+
+## 2026-07-07 — T-007
+- 成果: 更新體驗閉環。log 依類別分區即時面板（stderr 標紅）；成功後
+  自動重讀該類清單並以差集（monthKey+raw 合成鍵，update-view.mjs 純函式）
+  高亮 NEW 項目；失敗保留面板紅標 exit code。updater/main/preload 未動。
+- 改動: packages/desktop-ui/{src/update-view.mjs,test/update-view.test.mjs,
+  renderer.mjs,index.html}
+- 測試: node --test 77/77 pass（新增 11，先紅後綠；調度員親自複跑確認）
