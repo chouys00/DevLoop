@@ -81,8 +81,10 @@ subagent 回報後，依序：
    - 所有變更必須在 `workspace/` 內或本圈的 devloop 狀態檔；`devloop/GOAL.md` 絕不可有 diff
    - 不得出現 `package.json` / `node_modules` / 任何新依賴痕跡
    - 既有測試檔不得被刪或大幅縮水（`git diff --stat` 看）
-   任一違反 → 還原 workspace（`git checkout -- workspace/` 加 `git clean -fd workspace/`），
-   任務標 `blocked`（原因：越界改動），寫一條 LESSONS，本圈結束。
+   任一違反 → 還原**所有越界變更**（不只 workspace）：對 `git status --porcelain`
+   列出、且非本圈狀態檔更新的每個路徑，已追蹤者 `git checkout -- <路徑>`，
+   未追蹤者刪除；還原後確認 `devloop/GOAL.md` 無 diff，才將任務標 `blocked`
+   （原因：越界改動），寫一條 LESSONS，本圈結束。
 2. **親自驗證測試**：照 `GOAL.md` 指定的測試指令（如 `node --test`）親自跑一次，
    只看最終統計行。與 subagent 回報不符 → 視同失敗。
 3. **失敗處理**：失敗 → 帶失敗摘要**重派一次**（附前次失敗原因）。再失敗 →
@@ -94,8 +96,9 @@ subagent 回報後，依序：
 1. `TASKS.md`：任務標 `done`。
 2. `PROGRESS.md` 追加一節（照檔內範例格式：日期、任務 ID、成果、改動、測試）。
 3. subagent 回報的「教訓」非「無」→ 追加進 `LESSONS.md`。
-4. git commit：**範圍 = subagent 回報的改動檔案 + 本圈更新的 devloop 狀態檔**
-   （訊息格式 `feat(T-xxx): 描述` 或 `fix(T-xxx): 描述`）。
+4. git commit：**範圍 = 驗收時 `git status` 實際列出且通過檢查的變更 +
+   本圈更新的 devloop 狀態檔**（不憑 subagent 自報清單；訊息格式
+   `feat(T-xxx): 描述` 或 `fix(T-xxx): 描述`）。
 
 ### 7. 發想（僅當 todo 清單見底）
 
@@ -119,7 +122,8 @@ subagent 回報後，依序：
 1. `DECISIONS.md` 有 pending → 「等待你在 DECISIONS.md 裁示 D-xxx」
 2. `TASKS.md` 內未解決的 `blocked` 任務達 **2 個** → 「疑似系統性問題，請看 TASKS.md 的 blocked 原因」
 3. hybrid 模式下發想完成 → 「請核准 TASKS.md 中的 proposed 任務」
-4. 全部任務 done 且發想為 0 個 → 「目標完成」
+4. 無 `todo`/`proposed`/`doing` 且發想為 0 個 → 若 `TASKS.md` 仍有 `blocked`：
+   「僅剩 blocked 任務，請裁決」；否則：「目標完成」
 5. 來源 `ai` 的任務累計達 **10 個** → 「AI 任務額度用盡，請檢視方向後再放行」
 
 ## Context 紀律
