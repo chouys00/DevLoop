@@ -61,14 +61,44 @@ function cmdList(positionals, values) {
   }
 }
 
+/**
+ * 解析並驗證 id positional。缺少或非正整數時丟出錯誤。
+ * @param {string[]} positionals
+ * @param {string} cmd 子指令名稱（用於錯誤訊息）
+ * @returns {number}
+ */
+function parseId(positionals, cmd) {
+  const raw = positionals[0];
+  if (raw === undefined || !/^\d+$/.test(raw)) {
+    throw new Error(`${cmd}: 需要數字 id，例如 node todo.js ${cmd} 1`);
+  }
+  return Number(raw);
+}
+
 function cmdDone(positionals, values) {
-  // TODO: 標記完成
-  throw new Error('not implemented: done');
+  const id = parseId(positionals, 'done');
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) {
+    throw new Error(`done: 找不到 id ${id}`);
+  }
+  todo.done = true;
+  save(file, todos);
+  console.log(`done ${todo.id}: ${todo.text}`);
 }
 
 function cmdRemove(positionals, values) {
-  // TODO: 刪除待辦事項
-  throw new Error('not implemented: remove');
+  const id = parseId(positionals, 'remove');
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  const index = todos.findIndex((t) => t.id === id);
+  if (index === -1) {
+    throw new Error(`remove: 找不到 id ${id}`);
+  }
+  const [removed] = todos.splice(index, 1);
+  save(file, todos);
+  console.log(`removed ${removed.id}: ${removed.text}`);
 }
 
 const COMMANDS = {

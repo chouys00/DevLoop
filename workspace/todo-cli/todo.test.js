@@ -97,3 +97,60 @@ test('list 逐行輸出 id、勾選狀態與文字', (t) => {
   assert.match(lines[1], /\b2\b/);
   assert.match(lines[1], /write tests/);
 });
+
+// ---- done 子指令 ----
+
+test('done 標記指定 id 為完成，其餘不變', () => {
+  const file = tmpFile();
+  save(file, [
+    { id: 1, text: 'buy milk', done: false },
+    { id: 2, text: 'write tests', done: false },
+  ]);
+  main(['done', '2', '--file', file]);
+  assert.deepEqual(load(file), [
+    { id: 1, text: 'buy milk', done: false },
+    { id: 2, text: 'write tests', done: true },
+  ]);
+});
+
+test('done 不存在的 id 丟出錯誤且檔案不變', () => {
+  const file = tmpFile();
+  const todos = [{ id: 1, text: 'buy milk', done: false }];
+  save(file, todos);
+  assert.throws(() => main(['done', '99', '--file', file]), /done.*99/);
+  assert.deepEqual(load(file), todos);
+});
+
+test('done 缺少或非數字 id 丟出錯誤', () => {
+  const file = tmpFile();
+  save(file, [{ id: 1, text: 'buy milk', done: false }]);
+  assert.throws(() => main(['done', '--file', file]), /done/);
+  assert.throws(() => main(['done', 'abc', '--file', file]), /done/);
+});
+
+// ---- remove 子指令 ----
+
+test('remove 刪除指定 id，其餘保留', () => {
+  const file = tmpFile();
+  save(file, [
+    { id: 1, text: 'buy milk', done: false },
+    { id: 2, text: 'write tests', done: true },
+  ]);
+  main(['remove', '1', '--file', file]);
+  assert.deepEqual(load(file), [{ id: 2, text: 'write tests', done: true }]);
+});
+
+test('remove 不存在的 id 丟出錯誤且檔案不變', () => {
+  const file = tmpFile();
+  const todos = [{ id: 1, text: 'buy milk', done: false }];
+  save(file, todos);
+  assert.throws(() => main(['remove', '99', '--file', file]), /remove.*99/);
+  assert.deepEqual(load(file), todos);
+});
+
+test('remove 缺少或非數字 id 丟出錯誤', () => {
+  const file = tmpFile();
+  save(file, [{ id: 1, text: 'buy milk', done: false }]);
+  assert.throws(() => main(['remove', '--file', file]), /remove/);
+  assert.throws(() => main(['remove', '1.5', '--file', file]), /remove/);
+});
