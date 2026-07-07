@@ -1,0 +1,151 @@
+#!/usr/bin/env node
+'use strict';
+
+// todo-cli 骨架：子指令分派 (add/list/done/remove) + JSON 存取層 (load/save)
+// 僅使用 Node 22 內建模組。
+
+const fs = require('node:fs');
+const path = require('node:path');
+const { parseArgs } = require('node:util');
+
+const DEFAULT_FILE = path.join(__dirname, 'todos.json');
+
+// ---- JSON 存取層 ----
+
+/**
+ * 讀取待辦清單。檔案不存在時回傳空陣列。
+ * @param {string} [file]
+ * @returns {Array<object>}
+ */
+function load(file = DEFAULT_FILE) {
+  if (!fs.existsSync(file)) return [];
+  const raw = fs.readFileSync(file, 'utf8');
+  if (raw.trim() === '') return [];
+  return JSON.parse(raw);
+}
+
+/**
+ * 寫入待辦清單（覆寫整個檔案）。
+ * @param {string} file
+ * @param {Array<object>} todos
+ */
+function save(file = DEFAULT_FILE, todos = []) {
+  fs.writeFileSync(file, JSON.stringify(todos, null, 2) + '\n', 'utf8');
+}
+
+// ---- 子指令空殼 ----
+
+function cmdAdd(positionals, values) {
+  const text = positionals.join(' ').trim();
+  if (text === '') {
+    throw new Error('add: 需要待辦文字，例如 node todo.js add "buy milk"');
+  }
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  const nextId = todos.reduce((max, t) => Math.max(max, t.id), 0) + 1;
+  const todo = { id: nextId, text, done: false };
+  todos.push(todo);
+  save(file, todos);
+  console.log(`added ${todo.id}: ${todo.text}`);
+}
+
+function cmdList(positionals, values) {
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  if (todos.length === 0) {
+    console.log('(empty)');
+    return;
+  }
+  for (const t of todos) {
+    console.log(`${t.done ? '[x]' : '[ ]'} ${t.id}. ${t.text}`);
+  }
+}
+
+/**
+ * 解析並驗證 id positional。缺少或非正整數時丟出錯誤。
+ * @param {string[]} positionals
+ * @param {string} cmd 子指令名稱（用於錯誤訊息）
+ * @returns {number}
+ */
+function parseId(positionals, cmd) {
+  const raw = positionals[0];
+  if (raw === undefined || !/^\d+$/.test(raw)) {
+    throw new Error(`${cmd}: 需要數字 id，例如 node todo.js ${cmd} 1`);
+  }
+  return Number(raw);
+}
+
+function cmdDone(positionals, values) {
+  const id = parseId(positionals, 'done');
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) {
+    throw new Error(`done: 找不到 id ${id}`);
+  }
+  todo.done = true;
+  save(file, todos);
+  console.log(`done ${todo.id}: ${todo.text}`);
+}
+
+function cmdRemove(positionals, values) {
+  const id = parseId(positionals, 'remove');
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  const index = todos.findIndex((t) => t.id === id);
+  if (index === -1) {
+    throw new Error(`remove: 找不到 id ${id}`);
+  }
+  const [removed] = todos.splice(index, 1);
+  save(file, todos);
+  console.log(`removed ${removed.id}: ${removed.text}`);
+}
+
+const COMMANDS = {
+  add: cmdAdd,
+  list: cmdList,
+  done: cmdDone,
+  remove: cmdRemove,
+};
+
+function usage() {
+  return [
+    'Usage: node todo.js <command> [args]',
+    '',
+    'Commands:',
+    '  add <text>     新增待辦事項',
+    '  list           列出待辦事項',
+    '  done <id>      標記完成',
+    '  remove <id>    刪除待辦事項',
+    '',
+    'Options:',
+    '  --file <path>  指定 JSON 資料檔（預設 todos.json）',
+  ].join('\n');
+}
+
+// ---- 分派 ----
+
+function main(argv = process.argv.slice(2)) {
+  const { values, positionals } = parseArgs({
+    args: argv,
+    options: {
+      file: { type: 'string' },
+    },
+    allowPositionals: true,
+  });
+
+  const [command, ...rest] = positionals;
+  const handler = COMMANDS[command];
+  if (!handler) {
+    console.error(usage());
+    process.exitCode = 1;
+    return;
+  }
+  handler(rest, values);
+}
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = { load, save, main, DEFAULT_FILE };

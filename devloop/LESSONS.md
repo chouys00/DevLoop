@@ -1,0 +1,11 @@
+# LESSONS
+
+<!-- 踩雷教訓：環境問題、依賴陷阱、反覆犯的錯。新 session 開場必讀。保持精簡，過時就刪。 -->
+
+- 專案路徑含中文：跑指令一律用 PowerShell（Git Bash 會把路徑編碼弄壞）。
+- CatchList monorepo：新 package 放 `packages/*` 下即被 workspaces 自動納入，不需改根 package.json。`npm install --workspace <name>` 首次可能印 `no workspace folder present` 警告，但仍正確安裝，可忽略。
+- CatchList 是巢狀 git repo（`workspace/CatchList/.git`），與外層 DevLoop repo 各自獨立：UI 工作 commit 在 CatchList 的 `feat/desktop-ui` 分支，devloop 狀態檔 commit 在外層 repo。穩定分支是 CatchList 的 `master`。
+- desktop-ui 要用 `@catchlist/core` 時：workspace symlink 是空目錄（package 名解析不到），改用相對路徑 `../../core/mdstore.js` 唯讀匯入 sibling 才穩。Electron 架構已備 preload contextBridge + `ipcMain.handle`，T-003/T-004 沿用同一 IPC 橋。
+- 更新指令接線：`update:anime`→spiderMAL、`update:movies`→imdb_tracker、`update:games`→steam_discovery（cwd 須為 repo 根）。Windows 下 npm.cmd 要 shell:true，但 spawn dummy `node -e` 測試要 shell:false（否則含空白路徑被 cmd 破壞）。
+- 越界檢查必跑 `git status --porcelain`：subagent 的 shell 指令可能在 repo 根誤建殘留檔（曾出現 0-byte `process.exit(0)`），未追蹤者驗收時一併刪除。
+- core `loadSections` 有損：會吃掉遊戲 md 的非標題前言，且動畫「季別」全映射到 `YYYY-00` 鍵→Map 碰撞只留一個→同年多季會遺失。寫回時不能天真 load→write，需自寫順序保留解析器 + 合成鍵（T-004 已如此）。**疑慮**：T-002 的預覽 reader 直接用 loadSections，動畫同年多季預覽可能只顯示一季、遊戲前言遺失——待發想任務驗證/修正。
