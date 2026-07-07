@@ -5,7 +5,7 @@
 
 ## T-001
 
-- 狀態: todo
+- 狀態: done
 - 來源: human
 - 描述: 建立 workspace/todo-cli/todo.js 骨架：util.parseArgs 子指令
   (add/list/done/remove) 的分派空殼 + JSON 存取層 (load/save)，並建立

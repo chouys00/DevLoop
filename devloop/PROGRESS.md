@@ -7,3 +7,9 @@
 - 改動: workspace/todo-cli/todo.js, workspace/todo-cli/todo.test.js
 - 測試: 3/3 pass
 -->
+
+## 2026-07-07 — T-001
+
+- 成果: 建立 todo.js 骨架（parseArgs 分派空殼 + JSON 存取層）與 todo.test.js
+- 改動: workspace/todo-cli/todo.js, workspace/todo-cli/todo.test.js
+- 測試: 4/4 pass（node --test，調度員親自複跑確認）
