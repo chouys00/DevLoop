@@ -28,3 +28,14 @@
   renderer.mjs,test/reader.test.mjs,test/fixtures/*,main.mjs,index.html,package.json}
 - 測試: node --test 7/7 pass（排序/count/解析/空檔/缺檔/錯誤路徑）；smoke 仍 exit 0
 - 前端: vanilla DOM 無框架（純唯讀清單，輕量）
+
+## 2026-07-07 — T-003
+- 成果: UI 觸發抓取更新。updater.mjs spawn 接線層以 cwd=repo 根呼叫既有
+  `update:anime|movies|games`（→ npm run update --workspace spiderMAL/imdb_tracker/
+  steam_discovery），只呼叫不改抓取邏輯。Windows npm.cmd 用 shell:true、
+  指令可注入；執行中類別擋重複觸發。IPC 混合式：ipcMain.handle 回最終結果 +
+  webContents.send 串流進度；三顆按鈕顯示執行中/成功/失敗+exit code。
+- 改動: packages/desktop-ui/{src/updater.mjs,test/updater.test.mjs,main.mjs,
+  preload.cjs,renderer.mjs,index.html}
+- 測試: node --test 15/15 pass（全用 dummy node -e 指令，未觸發真實更新）；smoke exit 0
+- 越界: 清掉一個 subagent shell 誤建於 repo 根的 0-byte 殘留檔 `process.exit(0)`

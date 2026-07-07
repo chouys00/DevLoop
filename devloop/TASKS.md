@@ -22,7 +22,7 @@
 
 ## T-003
 
-- 狀態: todo
+- 狀態: done
 - 來源: human
 - 描述: 觸發抓取更新。UI 三顆按鈕（動畫/電影/遊戲），各自以 child_process
   呼叫既有 `npm run update:anime|movies|games`，顯示執行中狀態與結束
