@@ -13,3 +13,9 @@
 - 成果: 建立 todo.js 骨架（parseArgs 分派空殼 + JSON 存取層）與 todo.test.js
 - 改動: workspace/todo-cli/todo.js, workspace/todo-cli/todo.test.js
 - 測試: 4/4 pass（node --test，調度員親自複跑確認）
+
+## 2026-07-07 — T-002
+
+- 成果: 實作 add 與 list 子指令（add 串接多字詞、id 遞增；list 空清單印 (empty)、格式 [ ]/[x] id. text）
+- 改動: workspace/todo-cli/todo.js, workspace/todo-cli/todo.test.js
+- 測試: 10/10 pass（新增 6 個，調度員親自複跑確認）

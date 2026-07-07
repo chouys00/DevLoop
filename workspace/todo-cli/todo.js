@@ -36,13 +36,29 @@ function save(file = DEFAULT_FILE, todos = []) {
 // ---- 子指令空殼 ----
 
 function cmdAdd(positionals, values) {
-  // TODO: 新增待辦事項
-  throw new Error('not implemented: add');
+  const text = positionals.join(' ').trim();
+  if (text === '') {
+    throw new Error('add: 需要待辦文字，例如 node todo.js add "buy milk"');
+  }
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  const nextId = todos.reduce((max, t) => Math.max(max, t.id), 0) + 1;
+  const todo = { id: nextId, text, done: false };
+  todos.push(todo);
+  save(file, todos);
+  console.log(`added ${todo.id}: ${todo.text}`);
 }
 
 function cmdList(positionals, values) {
-  // TODO: 列出待辦事項
-  throw new Error('not implemented: list');
+  const file = values.file || DEFAULT_FILE;
+  const todos = load(file);
+  if (todos.length === 0) {
+    console.log('(empty)');
+    return;
+  }
+  for (const t of todos) {
+    console.log(`${t.done ? '[x]' : '[ ]'} ${t.id}. ${t.text}`);
+  }
 }
 
 function cmdDone(positionals, values) {
