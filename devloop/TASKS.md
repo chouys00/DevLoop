@@ -14,7 +14,7 @@
 
 ## T-002
 
-- 狀態: todo
+- 狀態: done
 - 來源: human
 - 描述: md 讀取層 + 預覽最新清單。以 `packages/core/mdstore.js` 解析三份
   md（路徑可設定，預設沿用各模組 config 現值），在 UI 分頁顯示動畫/電影/

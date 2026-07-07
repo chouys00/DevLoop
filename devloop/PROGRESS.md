@@ -17,3 +17,14 @@
 - 測試: smoke test（SMOKE_TEST=1 開機後立即 quit）親自跑通，exit code 0
 - 備註: 依賴安裝由已核准 GOAL 授權；越界檢查通過（三抓取模組/core/排程檔零 diff，master 未動）
 - 啟動: `npm run start --workspace @catchlist/desktop-ui`（在 workspace/CatchList/ 下）
+
+## 2026-07-07 — T-002
+- 成果: desktop-ui 加入 md 讀取層 + 預覽最新清單（純讀）。reader.mjs 用
+  core 的 `loadSections`（唯讀複用，未改 core），取排序後最新 N 區段；
+  config.mjs 支援路徑覆寫（env > catchlist.paths.json > 三模組 config 預設值，
+  以 import 取值不改原檔）。Electron 正規架構：preload contextBridge +
+  `ipcMain.handle`，renderer 用 vanilla DOM 三欄呈現。檔案不存在/空檔優雅處理。
+- 改動: packages/desktop-ui/{src/reader.mjs,src/config.mjs,preload.cjs,
+  renderer.mjs,test/reader.test.mjs,test/fixtures/*,main.mjs,index.html,package.json}
+- 測試: node --test 7/7 pass（排序/count/解析/空檔/缺檔/錯誤路徑）；smoke 仍 exit 0
+- 前端: vanilla DOM 無框架（純唯讀清單，輕量）
